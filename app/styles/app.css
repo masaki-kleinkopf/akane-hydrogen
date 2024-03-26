@@ -6,6 +6,7 @@
   --header-height: 64px;
   --color-dark: #000;
   --color-light: #fff;
+  --color-offwhite:#FAF9F6;
 }
 
 img {
@@ -129,7 +130,7 @@ aside li {
 */
 .header {
   align-items: center;
-  background: #fff;
+  background: var(--color-offwhite);
   display: flex;
   height: var(--header-height);
   padding: 0 1rem;
