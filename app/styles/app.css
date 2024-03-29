@@ -336,6 +336,7 @@ aside li {
 }
 
 .recommended-product img {
+  border-radius: 10%;
   height: auto;
 }
 
@@ -352,6 +353,7 @@ aside li {
 }
 
 .collection-item img {
+  border-radius: 10%;
   height: auto;
 }
 
@@ -376,6 +378,7 @@ aside li {
 }
 
 .product-item img {
+  border-radius: 10%;
   height: auto;
   width: 100%;
 }
