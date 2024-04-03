@@ -9,7 +9,7 @@ export function Header({header, isLoggedIn, cart}) {
   const {shop, menu} = header;
   return (
     <header className="header">
-      <NavLink prefetch="intent" to="/" style={activeLinkStyle} end>
+      <NavLink className="hover:no-underline" prefetch="intent" to="/" end>
         <strong>{shop.name}</strong>
       </NavLink>
       <HeaderMenu

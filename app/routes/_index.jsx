@@ -71,7 +71,7 @@ function RecommendedProducts({products}) {
               {products.nodes.map((product) => (
                 <Link
                   key={product.id}
-                  className="recommended-product"
+                  className="recommended-product hover:no-underline"
                   to={`/products/${product.handle}`}
                 >
                   <Image
