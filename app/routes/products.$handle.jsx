@@ -1,4 +1,4 @@
-import {Suspense} from 'react';
+import {Suspense, useState} from 'react';
 import {defer, redirect} from '@shopify/remix-oxygen';
 import {Await, Link, useLoaderData} from '@remix-run/react';
 
@@ -106,6 +106,7 @@ export default function Product() {
   /** @type {LoaderReturnData} */
   const {product, variants} = useLoaderData();
   const {selectedVariant} = product;
+
   return (
     <div className="product">
       <ProductImage image={selectedVariant?.image} />
@@ -220,6 +221,7 @@ function ProductPrice({selectedVariant}) {
  * }}
  */
 function ProductForm({product, selectedVariant, variants}) {
+  const [quantity, setQuantity] = useState(1);
   return (
     <div className="product-form">
       <VariantSelector
@@ -240,7 +242,7 @@ function ProductForm({product, selectedVariant, variants}) {
             ? [
                 {
                   merchandiseId: selectedVariant.id,
-                  quantity: 1,
+                  quantity,
                 },
               ]
             : []
@@ -248,6 +250,11 @@ function ProductForm({product, selectedVariant, variants}) {
       >
         {selectedVariant?.availableForSale ? 'Add to cart' : 'Sold out'}
       </AddToCartButton>
+      <QuantityButtons
+        setQuantity={setQuantity}
+        quantity={quantity}
+        quantityAvailable={selectedVariant.quantityAvailable}
+      />
     </div>
   );
 }
@@ -316,6 +323,34 @@ function AddToCartButton({analytics, children, disabled, lines, onClick}) {
   );
 }
 
+/**
+ * @param {{
+ *   quantity: number;
+ *   setQuantity: React.ReactNode;
+ *   quantityAvailable: number;
+ * }}
+ */
+
+function QuantityButtons({quantity, setQuantity, quantityAvailable}) {
+  const addQuantity = () => {
+    if (quantity < quantityAvailable) {
+      setQuantity(quantity + 1);
+    }
+  };
+  const subtractQuantity = () => {
+    if (quantity > 1) {
+      setQuantity(quantity - 1);
+    }
+  };
+  return (
+    <div>
+      <button onClick={addQuantity}>+</button>
+      <span>{quantity}</span>
+      <button onClick={subtractQuantity}>-</button>
+    </div>
+  );
+}
+
 const PRODUCT_VARIANT_FRAGMENT = `#graphql
   fragment ProductVariant on ProductVariant {
     availableForSale
@@ -340,6 +375,7 @@ const PRODUCT_VARIANT_FRAGMENT = `#graphql
       title
       handle
     }
+    quantityAvailable
     selectedOptions {
       name
       value
