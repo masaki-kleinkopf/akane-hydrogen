@@ -343,10 +343,10 @@ function QuantityButtons({quantity, setQuantity, quantityAvailable}) {
     }
   };
   return (
-    <div>
-      <button onClick={addQuantity}>+</button>
-      <span>{quantity}</span>
+    <div className="flex gap-4">
       <button onClick={subtractQuantity}>-</button>
+      <span>{quantity}</span>
+      <button onClick={addQuantity}>+</button>
     </div>
   );
 }
