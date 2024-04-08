@@ -62,7 +62,7 @@ function FeaturedCollection({collection}) {
  */
 function RecommendedProducts({products}) {
   return (
-    <div className="recommended-products">
+    <div className="recommended-products m-4">
       <h2 className="pb-4">Featured</h2>
       <Suspense fallback={<div>Loading...</div>}>
         <Await resolve={products}>
@@ -79,9 +79,9 @@ function RecommendedProducts({products}) {
                     aspectRatio="1/1"
                     sizes="(min-width: 45em) 20vw, 50vw"
                   />
-                  <h4>{product.title}</h4>
+                  <h4 className="pt-4 pl-2">{product.title}</h4>
                   <small>
-                    <Money data={product.priceRange.minVariantPrice} />
+                    <Money data={product.priceRange.minVariantPrice} className="pl-2"/>
                   </small>
                 </Link>
               ))}
