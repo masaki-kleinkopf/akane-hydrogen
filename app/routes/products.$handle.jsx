@@ -149,9 +149,13 @@ function ProductImage({image}) {
 function ProductMain({selectedVariant, product, variants}) {
   const {title, descriptionHtml} = product;
   return (
-    <div className="product-main">
+    <div className="product-main m-4">
       <h1>{title}</h1>
-      <ProductPrice selectedVariant={selectedVariant} />
+      <br />
+      <p>
+        <strong>Description</strong>
+      </p>
+      <div dangerouslySetInnerHTML={{__html: descriptionHtml}} />
       <br />
       <Suspense
         fallback={
@@ -176,12 +180,7 @@ function ProductMain({selectedVariant, product, variants}) {
         </Await>
       </Suspense>
       <br />
-      <br />
-      <p>
-        <strong>Description</strong>
-      </p>
-      <br />
-      <div dangerouslySetInnerHTML={{__html: descriptionHtml}} />
+      <ProductPrice selectedVariant={selectedVariant} />
       <br />
     </div>
   );
@@ -223,7 +222,7 @@ function ProductPrice({selectedVariant}) {
 function ProductForm({product, selectedVariant, variants}) {
   const [quantity, setQuantity] = useState(1);
   return (
-    <div className="product-form">
+    <div className="product-form flex">
       <VariantSelector
         handle={product.handle}
         options={product.options}
@@ -233,6 +232,7 @@ function ProductForm({product, selectedVariant, variants}) {
       </VariantSelector>
       <br />
       <AddToCartButton
+        className="pr-4"
         disabled={!selectedVariant || !selectedVariant.availableForSale}
         onClick={() => {
           window.location.href = window.location.href + '#cart-aside';
@@ -311,6 +311,7 @@ function AddToCartButton({analytics, children, disabled, lines, onClick}) {
             value={JSON.stringify(analytics)}
           />
           <button
+            className="border border-solid border-1 border-black rounded-2xl px-4 py-2 mr-4"
             type="submit"
             onClick={onClick}
             disabled={disabled ?? fetcher.state !== 'idle'}
@@ -345,7 +346,7 @@ function QuantityButtons({quantity, setQuantity, quantityAvailable}) {
   return (
     <div className="flex gap-4">
       <button onClick={subtractQuantity}>-</button>
-      <span>{quantity}</span>
+      <span className="self-center">{quantity}</span>
       <button onClick={addQuantity}>+</button>
     </div>
   );

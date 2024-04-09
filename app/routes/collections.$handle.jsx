@@ -97,7 +97,7 @@ function ProductItem({product, loading}) {
   const variantUrl = useVariantUrl(product.handle, variant.selectedOptions);
   return (
     <Link
-      className="product-item"
+      className="product-item hover:no-underline"
       key={product.id}
       prefetch="intent"
       to={variantUrl}
