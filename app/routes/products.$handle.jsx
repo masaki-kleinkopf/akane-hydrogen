@@ -346,7 +346,13 @@ function QuantityButtons({quantity, setQuantity, quantityAvailable}) {
   return (
     <div className="flex gap-4">
       <button onClick={subtractQuantity}>-</button>
-      <span className="self-center">{quantity}</span>
+      <input
+        className="w-10 p-0 border-black bg-inherit rounded-xl text-center [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+        type="number"
+        name="qty"
+        value={quantity}
+        onChange={(e) => setQuantity(e.target.value)}
+      />
       <button onClick={addQuantity}>+</button>
     </div>
   );
