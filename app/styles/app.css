@@ -26,9 +26,12 @@ aside {
   max-width: var(--aside-width);
   min-width: var(--aside-width);
   position: fixed;
-  right: -100vw;
+  right: calc(-1 * var(--aside-width));
   top: 0;
   transition: transform 200ms ease-in-out;
+  @media (max-width: 500px) {
+    right: -100vw;
+  }
 }
 
 aside header {
