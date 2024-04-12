@@ -1,6 +1,7 @@
 import {Suspense, useState} from 'react';
 import {defer, redirect} from '@shopify/remix-oxygen';
 import {Await, Link, useLoaderData} from '@remix-run/react';
+import {useRootLoaderData} from '~/root';
 
 import {
   Image,
@@ -254,6 +255,7 @@ function ProductForm({product, selectedVariant, variants}) {
         setQuantity={setQuantity}
         quantity={quantity}
         quantityAvailable={selectedVariant.quantityAvailable}
+        selectedVariant={selectedVariant}
       />
     </div>
   );
@@ -332,9 +334,26 @@ function AddToCartButton({analytics, children, disabled, lines, onClick}) {
  * }}
  */
 
-function QuantityButtons({quantity, setQuantity, quantityAvailable}) {
+function QuantityButtons({
+  quantity,
+  setQuantity,
+  quantityAvailable,
+  selectedVariant,
+}) {
+  const rootData = useRootLoaderData();
+  const cartPromise = rootData.cart;
+  // limit quantity selection to account for items already in cart
+  const cartProduct = cartPromise?._data?.lines?.nodes?.filter(
+    (product) => product.merchandise.id === selectedVariant.id,
+  );
+  const cartQuantity = cartProduct?.[0]?.quantity;
+  let calculatedQuantity =
+    cartQuantity > 0
+      ? quantityAvailable - cartProduct?.[0]?.quantity
+      : quantityAvailable;
+
   const addQuantity = () => {
-    if (quantity < quantityAvailable) {
+    if (quantity < calculatedQuantity) {
       setQuantity(quantity + 1);
     }
   };
