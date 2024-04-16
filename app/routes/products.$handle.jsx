@@ -158,6 +158,8 @@ function ProductMain({selectedVariant, product, variants}) {
       </p>
       <div dangerouslySetInnerHTML={{__html: descriptionHtml}} />
       <br />
+      <ProductPrice selectedVariant={selectedVariant} />
+      <br />
       <Suspense
         fallback={
           <ProductForm
@@ -180,9 +182,6 @@ function ProductMain({selectedVariant, product, variants}) {
           )}
         </Await>
       </Suspense>
-      <br />
-      <ProductPrice selectedVariant={selectedVariant} />
-      <br />
     </div>
   );
 }
@@ -232,6 +231,12 @@ function ProductForm({product, selectedVariant, variants}) {
         {({option}) => <ProductOptions key={option.name} option={option} />}
       </VariantSelector>
       <br />
+      <QuantityButtons
+        setQuantity={setQuantity}
+        quantity={quantity}
+        quantityAvailable={selectedVariant.quantityAvailable}
+        selectedVariant={selectedVariant}
+      />
       <AddToCartButton
         className="pr-4"
         disabled={!selectedVariant || !selectedVariant.availableForSale}
@@ -251,12 +256,6 @@ function ProductForm({product, selectedVariant, variants}) {
       >
         {selectedVariant?.availableForSale ? 'Add to cart' : 'Sold out'}
       </AddToCartButton>
-      <QuantityButtons
-        setQuantity={setQuantity}
-        quantity={quantity}
-        quantityAvailable={selectedVariant.quantityAvailable}
-        selectedVariant={selectedVariant}
-      />
     </div>
   );
 }
@@ -313,7 +312,7 @@ function AddToCartButton({analytics, children, disabled, lines, onClick}) {
             value={JSON.stringify(analytics)}
           />
           <button
-            className="border border-solid border-1 border-black rounded-2xl px-4 py-2 mr-4 hover:bg-yellow-400"
+            className="border border-solid border-1 border-black rounded-2xl px-4 py-2 mr-4 hover:bg-yellow-400 transition-all duration-500"
             type="submit"
             onClick={onClick}
             disabled={disabled ?? fetcher.state !== 'idle'}
@@ -363,7 +362,7 @@ function QuantityButtons({
     }
   };
   return (
-    <div className="flex gap-4">
+    <div className="flex gap-4 pr-4">
       <button onClick={subtractQuantity}>-</button>
       <input
         className="w-10 p-0 border-black bg-inherit rounded-xl text-center [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
