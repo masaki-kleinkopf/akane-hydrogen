@@ -1,4 +1,4 @@
-import {Suspense, useState} from 'react';
+import {Suspense, useState, useEffect} from 'react';
 import {defer, redirect} from '@shopify/remix-oxygen';
 import {Await, Link, useLoaderData} from '@remix-run/react';
 import {useRootLoaderData} from '~/root';
@@ -362,15 +362,30 @@ function QuantityButtons({quantity, setQuantity, calculatedQuantity}) {
   };
   return (
     <div className="flex gap-4 pr-4">
-      <button onClick={subtractQuantity}>-</button>
+      <button
+        className="disabled:text-slate-300"
+        disabled={quantity === 1}
+        onClick={subtractQuantity}
+      >
+        -
+      </button>
+      {quantity}
       <input
         className="w-10 p-0 border-black bg-inherit rounded-xl text-center [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
         type="number"
         name="qty"
         value={quantity}
-        onChange={(e) => setQuantity(e.target.value)}
+        onChange={(e) => {
+          if (e.target.value < calculatedQuantity) setQuantity(e.target.value);
+        }}
       />
-      <button onClick={addQuantity}>+</button>
+      <button
+        className="disabled:text-slate-300"
+        disabled={quantity === calculatedQuantity}
+        onClick={addQuantity}
+      >
+        +
+      </button>
     </div>
   );
 }
