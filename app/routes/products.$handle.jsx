@@ -221,6 +221,18 @@ function ProductPrice({selectedVariant}) {
  */
 function ProductForm({product, selectedVariant, variants}) {
   const [quantity, setQuantity] = useState(1);
+  const rootData = useRootLoaderData();
+  const cartPromise = rootData.cart;
+  // limit quantity selection to account for items already in cart
+  const cartProduct = cartPromise?._data?.lines?.nodes?.filter(
+    (product) => product.merchandise.id === selectedVariant.id,
+  );
+  const cartQuantity = cartProduct?.[0]?.quantity;
+  const calculatedQuantity =
+    cartQuantity > 0
+      ? selectedVariant.quantityAvailable - cartProduct?.[0]?.quantity
+      : selectedVariant.quantityAvailable;
+
   return (
     <div className="product-form flex">
       <VariantSelector
@@ -232,14 +244,18 @@ function ProductForm({product, selectedVariant, variants}) {
       </VariantSelector>
       <br />
       <QuantityButtons
+        calculatedQuantity={calculatedQuantity}
         setQuantity={setQuantity}
         quantity={quantity}
-        quantityAvailable={selectedVariant.quantityAvailable}
         selectedVariant={selectedVariant}
       />
       <AddToCartButton
         className="pr-4"
-        disabled={!selectedVariant || !selectedVariant.availableForSale}
+        disabled={
+          !selectedVariant ||
+          !selectedVariant.availableForSale ||
+          calculatedQuantity === 0
+        }
         onClick={() => {
           window.location.href = window.location.href + '#cart-aside';
         }}
@@ -317,7 +333,7 @@ function AddToCartButton({analytics, children, disabled, lines, onClick}) {
             onClick={onClick}
             disabled={disabled ?? fetcher.state !== 'idle'}
           >
-            {children}
+            {disabled ? 'SOLD OUT' : children}
           </button>
         </>
       )}
@@ -329,28 +345,11 @@ function AddToCartButton({analytics, children, disabled, lines, onClick}) {
  * @param {{
  *   quantity: number;
  *   setQuantity: React.ReactNode;
- *   quantityAvailable: number;
+ *   calculatedQuantity: number;
  * }}
  */
 
-function QuantityButtons({
-  quantity,
-  setQuantity,
-  quantityAvailable,
-  selectedVariant,
-}) {
-  const rootData = useRootLoaderData();
-  const cartPromise = rootData.cart;
-  // limit quantity selection to account for items already in cart
-  const cartProduct = cartPromise?._data?.lines?.nodes?.filter(
-    (product) => product.merchandise.id === selectedVariant.id,
-  );
-  const cartQuantity = cartProduct?.[0]?.quantity;
-  let calculatedQuantity =
-    cartQuantity > 0
-      ? quantityAvailable - cartProduct?.[0]?.quantity
-      : quantityAvailable;
-
+function QuantityButtons({quantity, setQuantity, calculatedQuantity}) {
   const addQuantity = () => {
     if (quantity < calculatedQuantity) {
       setQuantity(quantity + 1);
