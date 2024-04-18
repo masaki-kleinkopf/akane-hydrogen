@@ -369,7 +369,6 @@ function QuantityButtons({quantity, setQuantity, calculatedQuantity}) {
       >
         -
       </button>
-      {quantity}
       <input
         className="w-10 p-0 border-black bg-inherit rounded-xl text-center [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
         type="number"
