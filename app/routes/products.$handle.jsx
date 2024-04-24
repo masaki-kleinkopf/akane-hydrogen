@@ -352,12 +352,12 @@ function AddToCartButton({analytics, children, disabled, lines, onClick}) {
 function QuantityButtons({quantity, setQuantity, calculatedQuantity}) {
   const addQuantity = () => {
     if (quantity < calculatedQuantity) {
-      setQuantity(quantity + 1);
+      setQuantity(parseInt(quantity + 1));
     }
   };
   const subtractQuantity = () => {
     if (quantity > 1) {
-      setQuantity(quantity - 1);
+      setQuantity(parseInt(quantity - 1));
     }
   };
   return (
@@ -375,7 +375,8 @@ function QuantityButtons({quantity, setQuantity, calculatedQuantity}) {
         name="qty"
         value={quantity}
         onChange={(e) => {
-          if (e.target.value < calculatedQuantity) setQuantity(e.target.value);
+          if (e.target.value <= calculatedQuantity)
+            setQuantity(parseInt(e.target.value));
         }}
       />
       <button
